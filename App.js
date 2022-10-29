@@ -1,14 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Button,
-  Pressable,
-  ScrollView,
-  Keyboard,
-} from "react-native";
+import { StyleSheet, Text, TextInput, View, Button, Pressable, ScrollView, Keyboard, } from "react-native";
 import Constants from "expo-constants";
 import { useState } from "react";
 // import { Dropdown } from 'react-native-material-dropdown';
