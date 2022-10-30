@@ -1,11 +1,23 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, TextInput, View, Button, Pressable, ScrollView, Keyboard, } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Button,
+  Pressable,
+  ScrollView,
+  Keyboard,
+} from "react-native";
 import Constants from "expo-constants";
 import { useState } from "react";
 // import { Dropdown } from 'react-native-material-dropdown';
 
 export default function App() {
   //constants and functions
+  //  regex
+  const name_re = /^[a-zA-z ]{2,}$/;
+  const age_re = /^[0-9]{1,3}$/;
   //list
   const [students, setStudents] = useState([]);
   //gender true: female, false: male
@@ -19,7 +31,7 @@ export default function App() {
   const [name, setname] = useState("");
   const [age, setage] = useState(0);
   const [gender, setgender] = useState(true);
-  const [genderStr, setgenderstr] = useState('');
+  const [genderStr, setgenderstr] = useState("");
 
   const [check, setCheck] = useState(false);
 
@@ -34,10 +46,10 @@ export default function App() {
     //   age: 0,
     //   gender: '',
     // });
-    setname('');
+    setname("");
     setage(0);
     setgender(true);
-    setgenderstr('');
+    setgenderstr("");
     setCheck(false);
     // count = 0;
   };
@@ -48,6 +60,17 @@ export default function App() {
     // setStudents([...students, student]);
     // alert(student.id + " " + student.name + student.gender + student.age)
     // alert(student.id + " " + name + gender + age);
+
+    switch (genderStr.toLowerCase()) {
+      case "male":
+        // alert('male')
+        setgender(false);
+        break;
+      case "female":
+        setgender(true);
+        break;
+    }
+
     setStudents([
       ...students,
       {
@@ -58,6 +81,7 @@ export default function App() {
         genderStr: genderStr,
       },
     ]);
+    // alert(gender)
     resetStudent();
     // alert('hi');
     // console.log(count)
@@ -72,27 +96,24 @@ export default function App() {
 
   const checkInput = () => {
     // alert('in check function')
-    // using regex
-    let name_re = /^[a-zA-z ]{2,}$/;
-    let age_re = /^[0-9]{1,3}$/;
     // if (name_re.test(name))
     //   alert('right')
     //checking gender
     let genderValid = false;
     // alert(genderStr)
-      // console.log(name)
-      switch(genderStr.toLowerCase()){
-      case ('male'):
-        genderValid = true;
-        setgender(false);
-        break;
-      case ('female'):
-        genderValid = true;
-        setgender(true);
-        break;
-    }
+    console.log(name);
+    // switch (genderStr.toLowerCase()) {
+    //   case "male":
+    //     genderValid = true;
+    //     setgender(false);
+    //     break;
+    //   case "female":
+    //     genderValid = true;
+    //     setgender(true);
+    //     break;
+    // }
     setCheck(name_re.test(name) && age_re.test(age) && age > 0 && genderValid);
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -112,7 +133,9 @@ export default function App() {
             autoComplete="off"
             value={name}
             // onChange={checkInput}
-            onChangeText={(name)=>{setname(name); checkInput()}}
+            onChangeText={(name) => {
+              setname(name);
+            }}
           />
           <TextInput
             style={styles.text_input}
@@ -120,7 +143,9 @@ export default function App() {
             autoComplete="off"
             value={age}
             // onChange={checkInput}
-            onChangeText={(age)=>{setage(age); checkInput()}}
+            onChangeText={(age) => {
+              setage(age);
+            }}
           />
           <TextInput
             style={styles.text_input}
@@ -128,7 +153,9 @@ export default function App() {
             autoComplete="off"
             value={genderStr}
             // onChange={checkInput}
-            onChangeText={(genderStr)=>{checkInput(); setgenderstr(genderStr);}}
+            onChangeText={(genderStr) => {
+              setgenderstr(genderStr);
+            }}
           />
         </View>
 
@@ -146,7 +173,15 @@ export default function App() {
           // disabled={checkInput}
           // onPress={addStudent}
         >
-          <Button style={styles.btn_txt} onPress={addStudent} disabled={!check} title='Submit' color='#91B1E7'/>
+          <Button
+            style={styles.btn_txt}
+            onPress={addStudent}
+            disabled={!(
+              name_re.test(name) && age_re.test(age) && age > 0 && (genderStr.toLowerCase() == 'female' || genderStr.toLowerCase() == 'male')
+            )}
+            title="Submit"
+            color="#91B1E7"
+          />
         </View>
 
         {/* list to display the results */}
@@ -158,9 +193,14 @@ export default function App() {
             {/* container for one student to be used in list */}
             {students.map((element, index) => (
               <View style={styles.student} key={index}>
-                <Text style={styles.student_text}>{index+1}. Name: {element.name}</Text>
+                <Text style={styles.student_text}>
+                  {index + 1}. Name: {element.name}
+                </Text>
                 <Text style={styles.student_text}>Age: {element.age}</Text>
-                <Text style={styles.student_text}>Gender: {element.genderStr}</Text>
+                <Text style={styles.student_text}>
+                  Gender: {element.genderStr}
+                  {/* Gender: {element.gender} */}
+                </Text>
               </View>
             ))}
           </View>
@@ -170,16 +210,16 @@ export default function App() {
             <Text style={styles.btn_txt}>Reset</Text>
           </Pressable> */}
 
-          <View
-          style={styles.button}
-        >
-          <Button style={styles.btn_txt} onPress={resetData} title='Reset' color='#91B1E7'/>
+          <View style={styles.button}>
+            <Button
+              style={styles.btn_txt}
+              onPress={resetData}
+              title="Reset"
+              color="#91B1E7"
+            />
+          </View>
         </View>
-
-        </View>
-
       </ScrollView>
-
     </View>
   );
 }
