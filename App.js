@@ -20,47 +20,22 @@ export default function App() {
   const age_re = /^[0-9]{1,3}$/;
   //list
   const [students, setStudents] = useState([]);
-  //gender true: female, false: male
-  const [student, setStudent] = useState({
-    id: 0,
-    name: "",
-    age: 0,
-    gender: true,
-  });
-
   const [name, setname] = useState("");
   const [age, setage] = useState(0);
+  //gender true: female, false: male
   const [gender, setgender] = useState(true);
   const [genderStr, setgenderstr] = useState("");
 
-  const [check, setCheck] = useState(false);
-
-  // to set IDs
-  // let count = 0;
-
   //utility to reset current student
   const resetStudent = () => {
-    // setStudent({
-    //   id: 0,
-    //   name: '',
-    //   age: 0,
-    //   gender: '',
-    // });
     setname("");
     setage(0);
     setgender(true);
     setgenderstr("");
-    setCheck(false);
-    // count = 0;
   };
 
   const addStudent = () => {
-    // alert(students.length);
-    // student.id = count++;
-    // setStudents([...students, student]);
-    // alert(student.id + " " + student.name + student.gender + student.age)
-    // alert(student.id + " " + name + gender + age);
-
+    //checking input validity
     switch (genderStr.toLowerCase()) {
       case "male":
         // alert('male')
@@ -69,60 +44,33 @@ export default function App() {
       case "female":
         setgender(true);
         break;
+      default:
+        alert('Invalid Input');
+        setgenderstr('')
     }
 
     setStudents([
       ...students,
       {
-        // id: ++count,
         name: name,
         age: age,
         gender: gender,
-        genderStr: genderStr,
       },
     ]);
-    // alert(gender)
+    //resetting values
     resetStudent();
-    // alert('hi');
-    // console.log(count)
     Keyboard.dismiss();
   };
 
   const resetData = () => {
     resetStudent();
     setStudents([]);
-    // count = 0;
-  };
-
-  const checkInput = () => {
-    // alert('in check function')
-    // if (name_re.test(name))
-    //   alert('right')
-    //checking gender
-    let genderValid = false;
-    // alert(genderStr)
-    console.log(name);
-    // switch (genderStr.toLowerCase()) {
-    //   case "male":
-    //     genderValid = true;
-    //     setgender(false);
-    //     break;
-    //   case "female":
-    //     genderValid = true;
-    //     setgender(true);
-    //     break;
-    // }
-    setCheck(name_re.test(name) && age_re.test(age) && age > 0 && genderValid);
   };
 
   return (
     <View style={styles.container}>
       {/* heading */}
       <Text style={styles.heading}>Students Manager</Text>
-
-      {/* <Text>
-        {name} {gender} {age} jhjhj
-      </Text> */}
 
       <ScrollView style={styles.scroll}>
         {/* text input fields */}
@@ -132,7 +80,6 @@ export default function App() {
             placeholder="Name"
             autoComplete="off"
             value={name}
-            // onChange={checkInput}
             onChangeText={(name) => {
               setname(name);
             }}
@@ -142,7 +89,6 @@ export default function App() {
             placeholder="Age"
             autoComplete="off"
             value={age}
-            // onChange={checkInput}
             onChangeText={(age) => {
               setage(age);
             }}
@@ -152,26 +98,16 @@ export default function App() {
             placeholder="Gender"
             autoComplete="off"
             value={genderStr}
-            // onChange={checkInput}
             onChangeText={(genderStr) => {
+              genderStr.toLowerCase() == 'female' ? setgender(true) : setgender(false)
               setgenderstr(genderStr);
             }}
           />
         </View>
 
         {/* submit button */}
-        {/* <Pressable
-          style={styles.button}
-          disabled={!check}
-          onPress={addStudent}
-        >
-          <Text style={styles.btn_txt}>Submit</Text>
-        </Pressable> */}
-
         <View
           style={styles.button}
-          // disabled={checkInput}
-          // onPress={addStudent}
         >
           <Button
             style={styles.btn_txt}
@@ -198,7 +134,7 @@ export default function App() {
                 </Text>
                 <Text style={styles.student_text}>Age: {element.age}</Text>
                 <Text style={styles.student_text}>
-                  Gender: {element.genderStr}
+                  Gender: {element.gender ? 'Female' : 'Male'}
                   {/* Gender: {element.gender} */}
                 </Text>
               </View>
@@ -206,10 +142,6 @@ export default function App() {
           </View>
 
           {/* reset button */}
-          {/* <Pressable style={styles.button} onPress={resetData}>
-            <Text style={styles.btn_txt}>Reset</Text>
-          </Pressable> */}
-
           <View style={styles.button}>
             <Button
               style={styles.btn_txt}
